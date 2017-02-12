@@ -26,26 +26,19 @@ public class MikusNOBE {
     public static void main(String[] args) throws IOException {
         String path = "C:\\Users\\kpvid\\Desktop\\png_sample.png";
         byte[] fileBytes = algo.getBytes(path);  
-        System.out.println(fileBytes);
+        int byteStreamSize = 50000;
         
-        String BinString = algo.bytesToBigBinString(fileBytes, fileBytes.length);
+        String BinString = algo.bytesToBigBinString(fileBytes, byteStreamSize);
         System.out.println(BinString);
         
-        byte[] fileBytesOut = algo.bigBinStringToBytes(BinString);
-        System.out.println(fileBytesOut);
-        
-        for (int i=0; i<50; i++) {
-            System.out.println(fileBytes[i] + " vs " + fileBytesOut[i]);
-        }
-        
+        String fake = algo.binToFakeLong(BinString);
+        BigInteger bigInt = algo.strToBigInt(fake);
+        System.out.println(bigInt);
+//        File fout = new File("test.png");
+//        FileOutputStream fos = new FileOutputStream(fout);
+//        fos.write(fileBytesOut);
+//        fos.close();
 
-//        System.out.println("fake long test");
-//        String fake = algo.binToFakeLong(BinString);
-        File fout = new File("test.png");
-        FileOutputStream fos = new FileOutputStream(fout);
-        fos.write(fileBytesOut);
-        fos.close();
-        
 //        
 //        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 //        bw.write(fake);

@@ -13,6 +13,7 @@ import java.math.BigInteger;
 
 
 public class algo {
+    
 	//retrieves byte array from input file
     public static byte[] getBytes(String path) throws IOException {
         Path filePath = Paths.get(path);
@@ -20,9 +21,7 @@ public class algo {
         return fileBytes;
     }
     
-    
-    
-	//pad string to 8 chars with 0s on left
+    //pad string to 8 chars with 0s on left
     public static String padZeros(String inBinString) {
         while(inBinString.length()<8) {
             inBinString = "0"+inBinString;
@@ -30,12 +29,13 @@ public class algo {
         return inBinString;
     }
     
+    //reverses a string
     public static String revString(String inString) {
         StringBuilder outString = new StringBuilder(inString);
         return outString.reverse().toString();
     }
     
-	//creates large binary string from byte array
+    //creates large binary string from byte array
     public static String bytesToBigBinString(byte[] inBytes, int numOfBytes) {
         String bigBinString = "";
         for (int i=0; i<numOfBytes; i++) {
@@ -57,10 +57,7 @@ public class algo {
     }
     
     //takes any binary string and converts to int
-    public static int binToInt(String bigBinString, char direction) {
-        if (direction == 'r') {
-                bigBinString = revString(bigBinString);
-        }
+    public static int binToInt(String bigBinString) {
         char[] binAsChar = bigBinString.toCharArray();
         int sum = 0;
         for (int i=0; i<binAsChar.length; i++) {
@@ -71,8 +68,30 @@ public class algo {
         return sum;
     }
     
-    public static void binToBigInt(String bigBinString) {
-        
+    public static long binToLong(String bigBinString, char direction) {
+        if (direction == 'r') {
+                bigBinString = revString(bigBinString);
+        }
+        char[] binAsChar = bigBinString.toCharArray();
+        long sum = 0;
+        for (int i=0; i<binAsChar.length; i++) {
+            if(binAsChar[i]=='1') {
+                sum+=Math.pow(2, i);
+            }
+        }
+        return sum;
+    }
+    
+    public static BigInteger strToBigInt(String bigString) {
+        BigInteger bigInt = new BigInteger(bigString);
+        return bigInt;
+    }
+    
+    public static int[] nobe(BigInteger bigInt, int streamSize) {
+        ArrayList<Integer> temp = new ArrayList();
+        long max = getMax(streamSize);
+//        for (int i=0;)
+        return null;
     }
     
     public static String binToFakeLong(String bigBinString) {
@@ -107,13 +126,13 @@ public class algo {
 //        }
 //    }
     
-//    public static long getMax(int numOfBytes) {
-//        String ones = "";
-//        for(int i=0; i<numOfBytes*8; i++) {
-//            ones += "1";
-//        }
-//        return binToLong(ones);
-//    }
+    public static long getMax(int numOfBytes) {
+        String ones = "";
+        for(int i=0; i<numOfBytes*8; i++) {
+            ones += "1";
+        }
+        return binToInt(ones);
+    }
     
     public static byte[] nobeComp(int bigNum) {
         ArrayList<Integer> keyList = new ArrayList<Integer>();
