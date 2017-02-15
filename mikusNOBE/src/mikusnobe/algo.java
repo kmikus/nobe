@@ -61,7 +61,7 @@ public class algo {
     
     //takes any binary string and converts to int
     //TODO is this necessary?
-    public static int binToLong(String bigBinString) {
+    public static long binToLong(String bigBinString) {
         char[] binAsChar = bigBinString.toCharArray();
         long sum = 0;
         for (int i=0; i<binAsChar.length; i++) {
@@ -100,10 +100,14 @@ public class algo {
 	//outer for loop - iterate through bases, start with getMax(currentVal), reset counter to 10^i
 	//inner loop - try each base to get as close as possible
     public static int[] nobe(BigInteger bigInt, int streamSize) {
-        ArrayList<Integer> temp = new ArrayList();
         long max = getMax(streamSize);
 //        for (int i=0;)
         return null;
+    }
+    
+    public static BigInteger bruteSubtract(BigInteger bigInt, int length) {
+        BigInteger bigMax = new BigInteger(getMax(length));
+        return bigMax.subtract(bigInt);
     }
     
 	//converts bin string to as close as possible (pad to 19 digits long) and concatenate to shorten overall chars used
@@ -148,7 +152,7 @@ public class algo {
         for(int i=0; i<numOfBytes*8; i++) {
             ones += "1";
         }
-        return binToInt(ones);
+        return binToLong(ones);
     }
     
 }
