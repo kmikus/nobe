@@ -99,16 +99,58 @@ public class algo {
 	//outer outer while loop - set threshold to arbitrary value (1 byte? = 255 int) if less, byte[] outfile
 	//outer for loop - iterate through bases, start with getMax(currentVal), reset counter to 10^i
 	//inner loop - try each base to get as close as possible
-    public static int[] nobe(BigInteger bigInt, int streamSize) {
-        long max = getMax(streamSize);
-//        for (int i=0;)
-        return null;
+    public static ArrayList nobe(BigInteger bigInt) {
+        //initalizations
+        BigInteger temp = bigInt; //value to be subtracted from until very small
+        int expCount = getBigIntLen(bigInt)+1; //start counter at 1+len(bigIntString)
+        int baseCount = 10; //start at base 10 and go down
+        BigInteger getClose = bigIntPow(baseCount, expCount); //initial try value
+        //once getClose is smaller than temp, subtract and repeat
+        ArrayList<Integer> hash = new ArrayList();
+        while (temp.intValue()>256) {
+            while(expCount>0) {
+                //exponent loop
+                //bigint compare returns 1,0,-1
+                if (getClose.compareTo(temp) < 0) {
+                    System.out.println("i got in");
+                    hash.add(baseCount);
+                    hash.add(expCount);
+                    temp = temp.subtract(getClose);
+                    expCount = getBigIntLen(temp)+1;
+                    baseCount = 10;
+                    getClose = bigIntPow(baseCount, expCount);
+                    break;
+                }
+                baseCount--;
+                while(baseCount>0) {
+                    if (getClose.compareTo(temp) < 0) {
+                        System.out.println("i got in");
+                        hash.add(baseCount);
+                        hash.add(expCount);
+                        temp = temp.subtract(getClose);
+                        expCount = getBigIntLen(temp)+1;
+                        baseCount = 10;
+                        getClose = bigIntPow(baseCount, expCount);
+                        break;
+                    }
+                    baseCount--;
+                    getClose = bigIntPow(baseCount, expCount);
+                }
+                expCount--;
+                getClose = bigIntPow(baseCount, expCount);
+                //TODO add base loop
+                //add final val to array
+            }
+            if (temp.intValue()<256)
+                break;
+        }
+        return hash;
     }
     
-    public static BigInteger bruteSubtract(BigInteger bigInt, int length) {
-        BigInteger bigMax = new BigInteger(getMax(length));
-        return bigMax.subtract(bigInt);
-    }
+//    public static BigInteger bruteSubtract(BigInteger bigInt, int length) {
+//        BigInteger bigMax = new BigInteger(getMax(length));
+//        return bigMax.subtract(bigInt);
+//    }
     
 	//converts bin string to as close as possible (pad to 19 digits long) and concatenate to shorten overall chars used
 	//might take too long
@@ -155,4 +197,13 @@ public class algo {
         return binToLong(ones);
     }
     
+    public static BigInteger bigIntPow(int base, int exp) {
+        BigInteger bigInt = new BigInteger(Integer.toString(base));
+        System.out.println(base + " " + exp + " " + (bigInt.pow(exp)).toString());
+        return bigInt.pow(exp);
+    }
+    
+    public static int getBigIntLen(BigInteger bigInt) {
+        return bigInt.toString().length();
+    }
 }
