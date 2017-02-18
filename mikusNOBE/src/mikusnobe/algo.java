@@ -61,9 +61,9 @@ public class algo {
     
     //takes any binary string and converts to int
     //TODO is this necessary?
-    public static long binToLong(String bigBinString) {
+    public static int binToLong(String bigBinString) {
         char[] binAsChar = bigBinString.toCharArray();
-        long sum = 0;
+        int sum = 0;
         for (int i=0; i<binAsChar.length; i++) {
             if(binAsChar[i]=='1') {
                 sum+=Math.pow(2, i);
@@ -102,13 +102,16 @@ public class algo {
     public static ArrayList nobe(BigInteger bigInt) {
         //initalizations
         BigInteger temp = bigInt; //value to be subtracted from until very small
-        int expCount = getBigIntLen(bigInt)+1; //start counter at 1+len(bigIntString)
+        int expCount = getBigIntLen(bigInt); //start counter at len(bigIntString)
         int baseCount = 10; //start at base 10 and go down
         BigInteger getClose = bigIntPow(baseCount, expCount); //initial try value
         //once getClose is smaller than temp, subtract and repeat
         ArrayList<Integer> hash = new ArrayList();
         while (temp.intValue()>256) {
             while(expCount>0) {
+                if (temp.intValue()<256) {
+                    break;
+                }
                 //exponent loop
                 //bigint compare returns 1,0,-1
                 if (getClose.compareTo(temp) < 0) {
@@ -116,33 +119,33 @@ public class algo {
                     hash.add(baseCount);
                     hash.add(expCount);
                     temp = temp.subtract(getClose);
-                    expCount = getBigIntLen(temp)+1;
+                    expCount = getBigIntLen(temp);
                     baseCount = 10;
                     getClose = bigIntPow(baseCount, expCount);
                     break;
                 }
-                baseCount--;
-                while(baseCount>0) {
-                    if (getClose.compareTo(temp) < 0) {
-                        System.out.println("i got in");
-                        hash.add(baseCount);
-                        hash.add(expCount);
-                        temp = temp.subtract(getClose);
-                        expCount = getBigIntLen(temp)+1;
-                        baseCount = 10;
-                        getClose = bigIntPow(baseCount, expCount);
-                        break;
-                    }
-                    baseCount--;
-                    getClose = bigIntPow(baseCount, expCount);
-                }
+//                while(baseCount>0) {
+//                    if (getClose.compareTo(temp) < 0) {
+//                        System.out.println("i got in");
+//                        hash.add(baseCount);
+//                        hash.add(expCount);
+//                        temp = temp.subtract(getClose);
+//                        expCount = getBigIntLen(temp);
+//                        baseCount = 10;
+//                        getClose = bigIntPow(baseCount, expCount);
+//                        break;
+//                    }
+//                    baseCount--;
+//                    getClose = bigIntPow(baseCount, expCount);
+//                }
                 expCount--;
                 getClose = bigIntPow(baseCount, expCount);
                 //TODO add base loop
                 //add final val to array
             }
-            if (temp.intValue()<256)
-                break;
+            if (temp.intValue()<256) {
+                hash.add(temp.intValue());
+            }
         }
         return hash;
     }
@@ -154,6 +157,7 @@ public class algo {
     
 	//converts bin string to as close as possible (pad to 19 digits long) and concatenate to shorten overall chars used
 	//might take too long
+    
     public static String binToFakeLong(String bigBinString) {
         char[] binAsChar = bigBinString.toCharArray();
         long sum = 0;
@@ -199,11 +203,40 @@ public class algo {
     
     public static BigInteger bigIntPow(int base, int exp) {
         BigInteger bigInt = new BigInteger(Integer.toString(base));
-        System.out.println(base + " " + exp + " " + (bigInt.pow(exp)).toString());
         return bigInt.pow(exp);
     }
     
     public static int getBigIntLen(BigInteger bigInt) {
         return bigInt.toString().length();
+    }
+    
+    public static OtherNobe otherNobe(BigInteger bigInt) {
+        ArrayList<Integer> hashOut = new ArrayList<>();
+        String i = "1";
+        int count=0;
+        BigInteger accumulator = new BigInteger("1");
+        while(accumulator.compareTo(bigInt) < 0) {
+            accumulator = accumulator.add(bigIntPow(2,binToLong(i)));
+            hashOut.add(binToLong(i));
+            i+="1";
+            count++;
+        }
+//        System.out.println(count);
+//        System.out.println((accumulator.subtract(bigInt)).toString().length());
+        OtherNobe output = new OtherNobe(hashOut, accumulator.subtract(bigInt));
+        return output;
+    }
+    
+    public static ArrayList otherNobeRecur(BigInteger bigInt) {
+        BigInteger temp = bigInt;
+        ArrayList<Integer> hashOut = new ArrayList<>();
+        //bigint.intValue returns a negative value sometimes if youre wondering about the ||
+        while((Math.abs(temp.intValue())>(int)Math.pow(2, 16))) {
+            //try catch for intValueExact < a value and catch exceptions to continue
+            OtherNobe data = otherNobe(temp);
+            hashOut.addAll(data.getHash());
+            temp = data.getRemainder();
+        }
+        return hashOut;
     }
 }
