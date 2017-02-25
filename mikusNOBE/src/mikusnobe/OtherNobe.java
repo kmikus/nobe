@@ -14,10 +14,14 @@ import java.math.BigInteger;
 public class OtherNobe {
     private ArrayList hash;
     private BigInteger remainder;
+    private String sigDigits;
+    private int numOfPasses;
     
-    public OtherNobe(ArrayList hash, BigInteger remainder) {
+    public OtherNobe(ArrayList hash, BigInteger remainder, String sigDigits, int numOfPasses) {
         this.hash = hash;
         this.remainder = remainder;
+        this.sigDigits = sigDigits;
+        this.numOfPasses = numOfPasses;
     }
     
     public ArrayList getHash() {
@@ -26,5 +30,13 @@ public class OtherNobe {
     
     public BigInteger getRemainder() {
         return remainder;
+    }
+    
+    public String getSigDigits() {
+        return sigDigits;
+    }
+    
+    public int getNumOfPasses() {
+        return numOfPasses;
     }
 }
