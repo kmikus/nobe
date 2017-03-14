@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mikusnobe;
+package MikusNOBE;
 import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -28,7 +28,7 @@ public class algo {
         }
         return inBinString;
     }
-    
+   
     //reverses a string
     public static String revString(String inString) {
         StringBuilder outString = new StringBuilder(inString);
@@ -236,5 +236,30 @@ public class algo {
         System.out.println(bigInt.toString().length());
         return hashOut;
     }
-    
+
+    public static void encode(BigInteger bigInt) {
+        String exponent="1";
+        BigInteger accumulator = BigInteger.ZERO;
+        BigInteger holdValue = BigInteger.ZERO;
+        BigInteger Threshold = new BigInteger("1024");
+
+        //outer loop
+        while(bigInt.subtract(accumulator).compareTo(Threshold) > 0) {
+            for (int base=2; base < 256; base++) {
+                while(bigInt.compareTo(accumulator) > 0) {
+                    holdValue = accumulator;
+                    accumulator.add(bigIntPow(base, binToInt(exponent)));
+                    exponent += "1";
+                }
+                exponent = "1";
+                accumulator = holdValue; //hold value stores value before going over
+            }
+            String sigDigits = getSigDigits(accumulator, bigInt);
+            bigInt = new BigInteger(bigInt.toString().substring(sigDigits.length())); //cut the significant digits off
+        }
+
+        System.out.println(bigInt.toString());
+        System.out.println(accumulator.toString());
+    }
+
 }

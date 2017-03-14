@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mikusnobe;
+package MikusNOBE;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,7 +26,8 @@ public class MikusNOBE {
 
     public static void main(String[] args) throws IOException {
         //TODO: GUI and customizable file input
-        String path = "C:\\Users\\kpvid\\Desktop\\png_sample.png";
+//        String path = "C:\\Users\\kpvid\\Desktop\\png_sample.png";
+        String path = "E:\\Kevin\\Personal\\Downloads\\1.png";
         byte[] fileBytes = algo.getBytes(path);
         int byteStreamSize = 10000;
         
@@ -34,6 +35,7 @@ public class MikusNOBE {
 //        System.out.println(BinString);
         String fake = algo.binToFakeLong(BinString);
         BigInteger bigInt = new BigInteger(fake);
+        algo.encode(bigInt);
         
         //TODO: file decompression and output
 //        File fout = new File("test.png");
