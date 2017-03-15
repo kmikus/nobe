@@ -237,29 +237,54 @@ public class algo {
         return hashOut;
     }
 
-    public static void encode(BigInteger bigInt) {
-        String exponent="1";
-        BigInteger accumulator = BigInteger.ZERO;
+    public static Encoder encode(BigInteger bigInt) {
+        System.out.println(bigInt.toString().length());
+        BigInteger beforeSigDigitsCut = bigInt;
+        String exponent;
         BigInteger holdValue = BigInteger.ZERO;
         BigInteger Threshold = new BigInteger("1024");
+        ArrayList sigDigits = new ArrayList<>();
+        ArrayList bases = new ArrayList<>();
+        ArrayList exponents = new ArrayList<>();
 
         //outer loop
-        while(bigInt.subtract(accumulator).compareTo(Threshold) > 0) {
+        //subtract from big int input to get below threshold
+        while(bigInt.compareTo(Threshold) > 0) {
+            //iterate through 2-255 as bases
             for (int base=2; base < 256; base++) {
-                while(bigInt.compareTo(accumulator) > 0) {
-                    holdValue = accumulator;
-                    accumulator.add(bigIntPow(base, binToInt(exponent)));
+                //break from for loop after meeting threshold
+                if (bigInt.compareTo(Threshold) < 0) {
+                    break;
+                }
+                //reset exp before entering while loop
+                exponent = "1";
+                //loop subtracts base to power until becoming negative and goes back to the previous non-negative value
+                while (true) {
+                    holdValue = bigInt; //temp value if subtraction turns big int negative
+                    bigInt = bigInt.subtract(bigIntPow(base, binToInt(exponent)));
+                    bases.add(base);
+                    exponents.add(exponent);
+                    if (bigInt.compareTo(BigInteger.ZERO) < 0) {
+                        bigInt = holdValue;
+                        break;
+                    }
                     exponent += "1";
                 }
-                exponent = "1";
-                accumulator = holdValue; //hold value stores value before going over
-            }
-            String sigDigits = getSigDigits(accumulator, bigInt);
-            bigInt = new BigInteger(bigInt.toString().substring(sigDigits.length())); //cut the significant digits off
-        }
+                String sigDigitsString = getSigDigits(bigInt, beforeSigDigitsCut);
+                sigDigits.add(sigDigitsString);
+                int sigDigitsLen = getSigDigits(bigInt, beforeSigDigitsCut).length();
 
-        System.out.println(bigInt.toString());
-        System.out.println(accumulator.toString());
+//            System.out.println("sig digits: " + sigDigitsLen);
+
+                bigInt = new BigInteger(bigInt.toString().substring(sigDigitsLen));
+                beforeSigDigitsCut = bigInt;
+
+                System.out.println(bigInt.toString().length());
+//            System.out.println("big int: " + bigInt);
+            }
+        }
+        Encoder enc = new Encoder(sigDigits, bases, exponents);
+        return enc;
     }
 
 }
