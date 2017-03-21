@@ -29,7 +29,8 @@ public class MikusNOBE {
 //        String path = "C:\\Users\\kpvid\\Desktop\\png_sample.png";
         String path = "E:\\Kevin\\Personal\\Downloads\\1.png";
         byte[] fileBytes = algo.getBytes(path);
-        int byteStreamSize = fileBytes.length;
+        int max_size = fileBytes.length; //use for whole file
+        int byteStreamSize = 10000;
         
         String BinString = algo.bytesToBigBinString(fileBytes, byteStreamSize);
 //        System.out.println(BinString);
@@ -41,7 +42,13 @@ public class MikusNOBE {
         System.out.println(enc.getBases().toString());
         System.out.println(enc.getExponents().toString());
         System.out.println(enc.getSignificantDigits().toString());
-        System.out.println(enc.getSignificantDigits().get(0).toString().length());
+
+        int[] nobeOutput = algo.prepareEncoderForFileOutput(enc);
+        System.out.print("Extracted values for nobe: ");
+        for(int value : nobeOutput) {
+            System.out.print(value + " ");
+        }
+        System.out.println();
         
         //TODO: file decompression and output
 //        File fout = new File("test.png");

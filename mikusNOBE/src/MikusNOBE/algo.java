@@ -270,21 +270,56 @@ public class algo {
                     }
                     exponent += "1";
                 }
+                //comment this section for only each 2-256 pass
                 String sigDigitsString = getSigDigits(bigInt, beforeSigDigitsCut);
                 sigDigits.add(sigDigitsString);
                 int sigDigitsLen = getSigDigits(bigInt, beforeSigDigitsCut).length();
 
-//            System.out.println("sig digits: " + sigDigitsLen);
+                System.out.println("sig digits: " + sigDigitsLen);
 
                 bigInt = new BigInteger(bigInt.toString().substring(sigDigitsLen));
                 beforeSigDigitsCut = bigInt;
 
-                System.out.println(bigInt.toString().length());
-//            System.out.println("big int: " + bigInt);
+                System.out.println("length: " + bigInt.toString().length());
+                System.out.println("big int: " + bigInt);
             }
+            //comment this for pass in each base
+//            String sigDigitsString = getSigDigits(bigInt, beforeSigDigitsCut);
+//            sigDigits.add(sigDigitsString);
+//            int sigDigitsLen = getSigDigits(bigInt, beforeSigDigitsCut).length();
+//
+//            System.out.println("sig digits: " + sigDigitsLen);
+//
+//            bigInt = new BigInteger(bigInt.toString().substring(sigDigitsLen));
+//            beforeSigDigitsCut = bigInt;
+//
+//            System.out.println("length: " + bigInt.toString().length());
+//            System.out.println("big int: " + bigInt);
         }
         Encoder enc = new Encoder(sigDigits, bases, exponents);
         return enc;
+    }
+
+    public static int[] prepareEncoderForFileOutput(Encoder enc) {
+        int count=0;
+        ArrayList<Integer> bases = enc.getBases();
+        int startingBase = (bases.size()!=0) ? bases.get(0) : 2;
+        int finalBase = bases.get(bases.size()-1);
+        int[] output = new int[finalBase-1];
+
+        for (int i=startingBase; i<finalBase+1; i++) {
+            for (int j=0; j<bases.size(); j++) {
+                if(i==bases.get(j)) {count++;}
+            }
+            output[i-2]=count;
+            count=0;
+        }
+
+        return output;
+    }
+
+    public static void writeToFile(Encoder enc, int formattedNobeValues) {
+        //TODO: use formatted output from prepare encoder method and sig digits from encoder object to write to a single text value, use delimeter to separate values.
     }
 
 }

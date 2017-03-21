@@ -32,4 +32,5 @@ public class Encoder {
     public ArrayList getExponents() {
         return exponents;
     }
+
 }
