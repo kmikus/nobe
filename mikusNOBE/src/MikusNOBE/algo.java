@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package MikusNOBE;
+import java.io.BufferedWriter;
+import java.io.PrintWriter;
 import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -134,7 +136,8 @@ public class algo {
     public static int getBigIntLen(BigInteger bigInt) {
         return bigInt.toString().length();
     }
-    
+
+    //NOW DEFUNCT DO NOT USE
     public static OtherNobe otherNobe(BigInteger bigInt) {
         //initializations
         ArrayList<Integer> hashOut = new ArrayList<>();
@@ -251,7 +254,7 @@ public class algo {
         //subtract from big int input to get below threshold
         while(bigInt.compareTo(Threshold) > 0) {
             //iterate through 2-255 as bases
-            for (int base=2; base < 256; base++) {
+            for (int base=3; base < 256; base+=2) {
                 //break from for loop after meeting threshold
                 if (bigInt.compareTo(Threshold) < 0) {
                     break;
@@ -318,8 +321,39 @@ public class algo {
         return output;
     }
 
-    public static void writeToFile(Encoder enc, int formattedNobeValues) {
-        //TODO: use formatted output from prepare encoder method and sig digits from encoder object to write to a single text value, use delimeter to separate values.
+    public static void writeToFile(Encoder enc, int[] formattedNobeValues) {
+        try {
+            PrintWriter pw = new PrintWriter("outputHash.txt", "UTF-8");
+            String outputString = "";
+
+            for (int eachBaseCount : formattedNobeValues) {
+                outputString += eachBaseCount+",";
+            }
+            outputString = outputString.substring(0, outputString.length()-1);
+
+            outputString += ":";
+
+            for (int i = 0; i < enc.getSignificantDigits().size(); i++) {
+                outputString += enc.getSignificantDigits().get(i)+",";
+            }
+            outputString = outputString.substring(0, outputString.length()-1);
+
+            pw.write(outputString);
+            pw.close();
+
+        } catch (IOException e) {
+            System.out.println("Error writing to file");
+        }
+    }
+
+    public static void fileWrite(String s) {
+        try {
+            PrintWriter pw = new PrintWriter("out.txt", "UTF-8");
+            pw.write(s);
+            pw.close();
+        } catch (IOException e) {
+            System.out.println("Error writing to file");
+        }
     }
 
 }

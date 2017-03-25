@@ -30,12 +30,13 @@ public class MikusNOBE {
         String path = "E:\\Kevin\\Personal\\Downloads\\1.png";
         byte[] fileBytes = algo.getBytes(path);
         int max_size = fileBytes.length; //use for whole file
-        int byteStreamSize = 10000;
+        int byteStreamSize = 20000;
         
         String BinString = algo.bytesToBigBinString(fileBytes, byteStreamSize);
 //        System.out.println(BinString);
         String fake = algo.binToFakeLong(BinString);
         BigInteger bigInt = new BigInteger(fake);
+
         Encoder enc = algo.encode(bigInt);
 
         System.out.println();
@@ -49,6 +50,8 @@ public class MikusNOBE {
             System.out.print(value + " ");
         }
         System.out.println();
+
+        algo.writeToFile(enc, nobeOutput);
         
         //TODO: file decompression and output
 //        File fout = new File("test.png");
