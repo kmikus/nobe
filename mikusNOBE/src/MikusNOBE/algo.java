@@ -4,8 +4,11 @@
  * and open the template in the editor.
  */
 package MikusNOBE;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -254,7 +257,7 @@ public class algo {
         //subtract from big int input to get below threshold
         while(bigInt.compareTo(Threshold) > 0) {
             //iterate through 2-255 as bases
-            for (int base=3; base < 256; base+=2) {
+            for (int base=2; base < 256; base++) {
                 //break from for loop after meeting threshold
                 if (bigInt.compareTo(Threshold) < 0) {
                     break;
@@ -346,13 +349,82 @@ public class algo {
         }
     }
 
-    public static void fileWrite(String s) {
+    public static void fileWrite(String s, String name) {
         try {
-            PrintWriter pw = new PrintWriter("out.txt", "UTF-8");
+            PrintWriter pw = new PrintWriter(name, "ASCII");
             pw.write(s);
             pw.close();
         } catch (IOException e) {
             System.out.println("Error writing to file");
+        }
+    }
+
+    public static void divisorEncode(BigInteger bigInt) {
+        int count = 0;
+        BigInteger two = new BigInteger("2");
+
+        while (true) {
+            if (isBigIntEven(bigInt)) {
+                bigInt = bigInt.divide(two);
+                System.out.println("Length of big int: " + bigInt.toString().length());
+                count++;
+                continue;
+            }
+
+            if (isLastDivisorItself(bigInt)) {
+                break;
+            }
+
+            bigInt = bigInt.divide(findNextDivisor(bigInt));
+            count++;
+            System.out.println("Length of big int: " + bigInt.toString().length());
+
+            if (count > 100000) {
+                break;
+            }
+        }
+
+        System.out.println(count);
+    }
+
+    public static BigInteger findNextDivisor(BigInteger bigInt) {
+        BigInteger testDivisor = new BigInteger("3");
+        while (true) {
+            if (isDivisor(bigInt, testDivisor)) {
+                return testDivisor;
+            }
+
+            addOneToBigInt(bigInt);
+        }
+    }
+
+    public static boolean isBigIntEven(BigInteger bigInt) {
+        BigInteger two = new BigInteger("2");
+        if (isDivisor(bigInt, two)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isDivisor(BigInteger bigInt, BigInteger divisor) {
+        if (bigInt.remainder(divisor).compareTo(BigInteger.ZERO) == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static BigInteger addOneToBigInt(BigInteger bigInt) {
+        bigInt = bigInt.add(BigInteger.ONE);
+        return bigInt;
+    }
+
+    public static boolean isLastDivisorItself(BigInteger bigInt) {
+        if (findNextDivisor(bigInt).compareTo(bigInt) == 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 

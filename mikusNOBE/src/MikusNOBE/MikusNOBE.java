@@ -36,23 +36,29 @@ public class MikusNOBE {
 //        System.out.println(BinString);
         String fake = algo.binToFakeLong(BinString);
         BigInteger bigInt = new BigInteger(fake);
+        algo.divisorEncode(bigInt);
 
-        Encoder enc = algo.encode(bigInt);
 
-        System.out.println();
-        System.out.println(enc.getBases().toString());
-        System.out.println(enc.getExponents().toString());
-        System.out.println(enc.getSignificantDigits().toString());
+        //Encoder section
+//        Encoder enc = algo.encode(bigInt);
+//
+//        System.out.println();
+//        System.out.println(enc.getBases().toString());
+//        System.out.println(enc.getExponents().toString());
+//        System.out.println(enc.getSignificantDigits().toString());
+//
+//        int[] nobeOutput = algo.prepareEncoderForFileOutput(enc);
+//        System.out.print("Extracted values for nobe: ");
+//        for(int value : nobeOutput) {
+//            System.out.print(value + " ");
+//        }
+//        System.out.println();
+//
+//        algo.writeToFile(enc, nobeOutput);
 
-        int[] nobeOutput = algo.prepareEncoderForFileOutput(enc);
-        System.out.print("Extracted values for nobe: ");
-        for(int value : nobeOutput) {
-            System.out.print(value + " ");
-        }
-        System.out.println();
 
-        algo.writeToFile(enc, nobeOutput);
-        
+
+
         //TODO: file decompression and output
 //        File fout = new File("test.png");
 //        FileOutputStream fos = new FileOutputStream(fout);
