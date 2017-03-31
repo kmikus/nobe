@@ -257,7 +257,7 @@ public class algo {
         //subtract from big int input to get below threshold
         while(bigInt.compareTo(Threshold) > 0) {
             //iterate through 2-255 as bases
-            for (int base=2; base < 256; base++) {
+            for (int base=2; base < 128; base++) {
                 //break from for loop after meeting threshold
                 if (bigInt.compareTo(Threshold) < 0) {
                     break;
@@ -268,6 +268,7 @@ public class algo {
                 while (true) {
                     holdValue = bigInt; //temp value if subtraction turns big int negative
                     bigInt = bigInt.subtract(bigIntPow(base, binToInt(exponent)));
+                    //TODO: don't add these when bigInt is going to be reset
                     bases.add(base);
                     exponents.add(exponent);
                     if (bigInt.compareTo(BigInteger.ZERO) < 0) {
@@ -277,30 +278,30 @@ public class algo {
                     exponent += "1";
                 }
                 //comment this section for only each 2-256 pass
-                String sigDigitsString = getSigDigits(bigInt, beforeSigDigitsCut);
-                sigDigits.add(sigDigitsString);
-                int sigDigitsLen = getSigDigits(bigInt, beforeSigDigitsCut).length();
-
-                System.out.println("sig digits: " + sigDigitsLen);
-
-                bigInt = new BigInteger(bigInt.toString().substring(sigDigitsLen));
-                beforeSigDigitsCut = bigInt;
-
-                System.out.println("length: " + bigInt.toString().length());
-                System.out.println("big int: " + bigInt);
+//                String sigDigitsString = getSigDigits(bigInt, beforeSigDigitsCut);
+//                sigDigits.add(sigDigitsString);
+//                int sigDigitsLen = getSigDigits(bigInt, beforeSigDigitsCut).length();
+//
+//                System.out.println("sig digits: " + sigDigitsLen);
+//
+//                bigInt = new BigInteger(bigInt.toString().substring(sigDigitsLen));
+//                beforeSigDigitsCut = bigInt;
+//
+//                System.out.println("length: " + bigInt.toString().length());
+//                System.out.println("big int: " + bigInt);
             }
             //comment this for pass in each base
-//            String sigDigitsString = getSigDigits(bigInt, beforeSigDigitsCut);
-//            sigDigits.add(sigDigitsString);
-//            int sigDigitsLen = getSigDigits(bigInt, beforeSigDigitsCut).length();
-//
-//            System.out.println("sig digits: " + sigDigitsLen);
-//
-//            bigInt = new BigInteger(bigInt.toString().substring(sigDigitsLen));
-//            beforeSigDigitsCut = bigInt;
-//
-//            System.out.println("length: " + bigInt.toString().length());
-//            System.out.println("big int: " + bigInt);
+            String sigDigitsString = getSigDigits(bigInt, beforeSigDigitsCut);
+            sigDigits.add(sigDigitsString);
+            int sigDigitsLen = getSigDigits(bigInt, beforeSigDigitsCut).length();
+
+            System.out.println("sig digits: " + sigDigitsLen);
+
+            bigInt = new BigInteger(bigInt.toString().substring(sigDigitsLen));
+            beforeSigDigitsCut = bigInt;
+
+            System.out.println("length: " + bigInt.toString().length());
+            System.out.println("big int: " + bigInt);
         }
         Encoder enc = new Encoder(sigDigits, bases, exponents);
         return enc;

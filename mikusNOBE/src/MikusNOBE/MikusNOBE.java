@@ -30,31 +30,31 @@ public class MikusNOBE {
         String path = "E:\\Kevin\\Personal\\Downloads\\1.png";
         byte[] fileBytes = algo.getBytes(path);
         int max_size = fileBytes.length; //use for whole file
-        int byteStreamSize = 20000;
+        int byteStreamSize = 5000;
         
         String BinString = algo.bytesToBigBinString(fileBytes, byteStreamSize);
 //        System.out.println(BinString);
         String fake = algo.binToFakeLong(BinString);
         BigInteger bigInt = new BigInteger(fake);
-        algo.divisorEncode(bigInt);
+//        algo.divisorEncode(bigInt);
 
 
         //Encoder section
-//        Encoder enc = algo.encode(bigInt);
-//
-//        System.out.println();
-//        System.out.println(enc.getBases().toString());
-//        System.out.println(enc.getExponents().toString());
-//        System.out.println(enc.getSignificantDigits().toString());
-//
-//        int[] nobeOutput = algo.prepareEncoderForFileOutput(enc);
-//        System.out.print("Extracted values for nobe: ");
-//        for(int value : nobeOutput) {
-//            System.out.print(value + " ");
-//        }
-//        System.out.println();
-//
-//        algo.writeToFile(enc, nobeOutput);
+        Encoder enc = algo.encode(bigInt);
+
+        System.out.println();
+        System.out.println(enc.getBases().toString());
+        System.out.println(enc.getExponents().toString());
+        System.out.println(enc.getSignificantDigits().toString());
+
+        int[] nobeOutput = algo.prepareEncoderForFileOutput(enc);
+        System.out.print("Extracted values for nobe: ");
+        for(int value : nobeOutput) {
+            System.out.print(value + " ");
+        }
+        System.out.println();
+
+        algo.writeToFile(enc, nobeOutput);
 
 
 
